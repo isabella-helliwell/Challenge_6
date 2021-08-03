@@ -11,7 +11,7 @@
   * web application: Jupyter Notebook
   * Output Data Files: WeatherPy_Database.csv, cities.csv, WeatherPy_vacation.csv 
   * Output .JPEG Files: WeatherPy_travel_map.png, WeatherPy_travel_map_markers.png, WeatherPy_vacation_map.png
-  * Google map data: OpenWeatherMap
+  * Google Cloud Platform
 ## 3. Analysis
 ### 3.1 Weather Data Retrieval
         We need to generate a set of 2000 random latitudes and longitudes, and then retrieve nearest city.
@@ -298,7 +298,9 @@ Output 4.WeatherPy_vacation_map.png
 
 
    ### 3.3 Create a Travel Itinerary Map
-            Last part of the challenge is to create a route, using the WeatherPy_vacation.csv and show the route.
+            Last part of the challenge is to create a route, using the WeatherPy_vacation.csv and show the route. For this
+            we will use Google Directions. We will also create a marker layer map with a pop-up marker for each city on the
+            itinerary.
             
             # Dependencies and Setup
             import pandas as pd
