@@ -294,3 +294,135 @@ Output 3.
               
 Output 4.WeatherPy_vacation_map.png
 ![image](https://user-images.githubusercontent.com/85843030/128057092-bd052990-9967-46d7-a37b-9e0aefb17f6b.png)
+
+
+
+   ### 3.3 Create a Travel Itinerary Map
+            Last part of the challenge is to create a route, using the WeatherPy_vacation.csv and show the route.
+            
+            # Dependencies and Setup
+            import pandas as pd
+            import requests
+            import gmaps
+            import gmaps.datasets
+
+            # Import API key
+            from config2 import g_key
+
+            # Configure gmaps
+            gmaps.configure(api_key=g_key)
+
+   
+           # 1. Read the WeatherPy_vacation.csv into a DataFrame.
+            vacation_df = pd.read_csv("Vacation_Search/CSV_Files/WeatherPy_vacation.csv")
+            vacation_df.head()
+
+           # 2. Using the template add the city name, the country code, the weather description and maximum temperature for the city.
+            info_box_template = """
+            <dl>
+            <dt>City</dt><dd>{City}</dd>
+            <dt>Country</dt><dd>{Country}</dd>
+            <dt>Current Description</dt><dd>{Current Description}</dd>
+            <dt>Max Temp</dt><dd>{Max Temp} °F</dd>
+            </dl>
+            """
+
+            # 3a. Get the data from each row and add it to the formatting template and store the data in a list.
+            hotel_info = [info_box_template.format(**row) for index, row in vacation_df.iterrows()]
+
+            # 3b. Get the latitude and longitude from each row and store in a new DataFrame.
+            locations = vacation_df[["Lat", "Lng"]]
+            
+            # 4a. Add a marker layer for each city to the map.
+            marker_layer = gmaps.marker_layer(locations, info_box_content=hotel_info)
+            # 4b. Display the figure
+            fig = gmaps.figure(center=(30.0, 31.0), zoom_level=2.05)
+            fig.add_layer(marker_layer)
+            fig
+            
+            # From the map above pick 4 cities and create a vacation itinerary route to travel between the four cities. 
+            # 5. Create DataFrames for each city by filtering the 'vacation_df' using the loc method. 
+            # Hint: The starting and ending city should be the same city.
+
+            # starting city is Greeneville US
+            #stop1 is Jasper US
+            #stop2 is Boone, US
+            #stop 3 is Hamilton US
+
+
+
+            vacation_start = vacation_df.loc[(vacation_df["City"]=="Greeneville")]
+            vacation_end = vacation_df.loc[(vacation_df["City"]=="Greeneville")]
+            vacation_stop1 = vacation_df.loc[(vacation_df["City"]=="Jasper")]
+            vacation_stop2 = vacation_df.loc[(vacation_df["City"]=="Boone")] 
+            vacation_stop3 = vacation_df.loc[(vacation_df["City"]=="Hamilton")]
+            
+            # 6. Get the latitude-longitude pairs as tuples from each city DataFrame using the to_numpy function and list indexing.
+              start = vacation_start[["Lat", "Lng"]].to_numpy()
+              end = vacation_end[["Lat", "Lng"]].to_numpy()
+              stop1 = vacation_stop1[['Lat', 'Lng']].to_numpy() 
+              stop2 = vacation_stop2[['Lat','Lng']].to_numpy()
+              stop3 = vacation_stop3[['Lat','Lng']].to_numpy()
+              
+              
+            # 7. Create a direction layer map using the start and end latitude-longitude pairs,
+            # and stop1, stop2, and stop3 as the waypoints. The travel_mode should be "DRIVING", "BICYCLING", or "WALKING".
+
+            start_coord=(start[0,0], start[0,1])
+            end_coord=start_coord
+            stop1_coord=(stop1[0,0], stop1[0,1])
+            stop2_coord=(stop2[0,0], stop2[0,1])
+            stop3_coord=(stop3[0,0], stop3[0,1])
+            
+            fig = gmaps.figure()
+            route = gmaps.directions_layer(start_coord, end_coord, waypoints=[stop1_coord, stop2_coord,stop3_coord], travel_mode='DRIVING')
+
+            fig.add_layer(route)
+            fig
+        
+Output5. WeatherPy_travel_map.png
+![image](https://user-images.githubusercontent.com/85843030/128059662-1109e813-65ad-41c4-941d-fb7417deebee.png)
+
+              # 8. To create a marker layer map between the four cities.
+              #  Combine the four city DataFrames into one DataFrame using the concat() function.
+              itinerary_df = pd.concat([vacation_start,vacation_end,vacation_stop1,vacation_stop2,vacation_stop3],ignore_index=True)
+              itinerary_df
+
+
+Output.6
+![image](https://user-images.githubusercontent.com/85843030/128060153-e9a12c21-21cb-4ed3-b27b-d67c1bc3cf5b.png)
+
+
+              # 9 Using the template add city name, the country code, the weather description and maximum temperature for the city. 
+              info_box_template = """
+              <dl>
+              <dt>Hotel Name</dt><dd>{Hotel Name}</dd>
+              <dt>City</dt><dd>{City}</dd>
+              <dt>Country</dt><dd>{Country}</dd>
+              <dt>Current Description</dt><dd>{Current Description}</dd>
+              <dt>Max Temp</dt><dd>{Max Temp} °F</dd>
+              </dl>
+              """
+
+              # 10a Get the data from each row and add it to the formatting template and store the data in a list.
+              hotel_info = [info_box_template.format(**row) for index, row in itinerary_df.iterrows()]
+
+              # 10b. Get the latitude and longitude from each row and store in a new DataFrame.
+              locations = itinerary_df[["Lat", "Lng"]]
+
+              # 11a. Add a marker layer for each city to the map.
+              marker_layer = gmaps.marker_layer(locations, info_box_content=hotel_info)
+              # 11b. Display the figure
+              fig = gmaps.figure(center=(41, -87.0), zoom_level=6)
+              fig.add_layer(marker_layer)
+              fig
+
+
+
+
+Output7. WeatherPy_travel_map_markers.png
+![image](https://user-images.githubusercontent.com/85843030/128059890-a0fb8282-fc11-4bdf-8bfa-651277002cfa.png)
+
+
+
+            
