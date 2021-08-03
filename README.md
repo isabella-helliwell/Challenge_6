@@ -141,7 +141,7 @@
           print("-----------------------------")
 
         
-        Next i will check again to make sure there are cities stored in the city-data list by counting the length of the list:
+        Next i will check again to make sure there are cities stored in the city-data list by counting the length of the array:
           # to check there are data stored in the city data
             len(city_data)
        
@@ -150,5 +150,11 @@
           city_data_df = pd.DataFrame(city_data)
           city_data_df.head(10)
 
-       
-       
+       Lastely we need to re order the columns and save the file 
+          new_column_order=['City', 'Country','Lat','Lng','Max Temp', 'Humidity', 'Cloudiness', 'Wind Speed', 'Current Description']
+          city_data_df=city_data_df[new_column_order]
+          # Create the output file (CSV).
+          output_data_file = "Weather_Database/WeatherPy_Database.csv"
+          # Export the City_Data into a CSV.
+          city_data_df.to_csv(output_data_file, index_label="City_ID")
+          
