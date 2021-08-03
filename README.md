@@ -159,4 +159,6 @@
           city_data_df.to_csv(output_data_file, index_label="City_ID")
           
   output1. ![image](https://user-images.githubusercontent.com/85843030/128047924-9934d8df-b45c-4364-b668-43939fb70439.png)
+  
+  ### 3.2 Create a Customer Travel Destination Map
         
