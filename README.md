@@ -249,8 +249,48 @@ Output 3.
 ![image](https://user-images.githubusercontent.com/85843030/128056163-42c27628-9c54-4ba1-8e2e-31ad004660a4.png)
             
             
+             As seen in Output 3 there are some cities where hotels could not be allocated. For those rows, we will drop the rows.
+            
+            # 7. Drop the rows where there is no Hotel Name.
+              #dropna() method
+              import numpy as np
+              import pandas as pd
+              
+              filter=hotel_df['Hotel Name']!=""
+              clean_hotel_df=hotel_df[filter]
+              clean_hotel_df.head()
             
             
-            
-            
-            
+            # 8a. Create the output File (CSV)
+              output_data_file='CSV_Files/WeatherPy_vacation.csv'
+              # 8b. Export the City_Data into a csv
+              clean_hotel_df.to_csv(output_data_file, index_label="City_ID")
+
+          Next we create a info box for all the cities with hotels, with the following information: City name, Country, weather condition, max temperature.
+          
+              # 9. Using the template add city name, the country code, the weather description and maximum temperature for the city.
+              info_box_template = """
+              <dl>
+              <dt>City</dt><dd>{City}</dd>
+              <dt>Country</dt><dd>{Country}</dd>
+              <dt>Current Description</dt><dd>{Current Description}</dd>
+              <dt>Max Temp</dt><dd>{Max Temp} °F</dd>
+              </dl>
+              """
+
+              # 10a. Get the data from each row and add it to the formatting template and store the data in a list.
+              hotel_info = [info_box_template.format(**row) for index, row in clean_hotel_df.iterrows()]
+
+              # 10b. Get the latitude and longitude from each row and store in a new DataFrame.
+              locations = clean_hotel_df[["Lat", "Lng"]]          
+          
+              # 11a. Add a marker layer for each city to the map. 
+              marker_layer = gmaps.marker_layer(locations, info_box_content=hotel_info)
+
+              # 11b. Display the figure
+              fig = gmaps.figure(center=(30.0, 31.0), zoom_level=2.05)
+              fig.add_layer(marker_layer)
+              fig
+              
+Output 4.WeatherPy_vacation_map.png
+![image](https://user-images.githubusercontent.com/85843030/128057092-bd052990-9967-46d7-a37b-9e0aefb17f6b.png)
