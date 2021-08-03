@@ -161,4 +161,36 @@
   output1. ![image](https://user-images.githubusercontent.com/85843030/128047924-9934d8df-b45c-4364-b668-43939fb70439.png)
   
   ### 3.2 Create a Customer Travel Destination Map
-        
+          The aim here, is to use input statements to retrieve customer weather preferences, and use those prefrences as input to
+          identify ptential travel destinations and nearby hotels.
+          First we import the dependencies and import the "WeatherPy_Database.csv" file that we created in section 3.1
+          Then, we will ask the user to input some temperature ranges that they want, like min and max temperature.
+          This input is used to filter the dataframe for the temperature ranges. In this example, we used 80-90 F.
+          
+            # Dependencies and Setup
+            import pandas as pd
+            import requests
+            import gmaps
+            # Import API key
+            from config1 import g_key
+            # Configure gmaps
+            gmaps.configure(api_key=g_key)
+
+            # 1. Import the WeatherPy_database.csv file. 
+            city_data_df = pd.read_csv("../Weather_Database/WeatherPy_Database.csv")
+            city_data_df.head()
+            
+            # 2. Prompt the user to enter minimum and maximum temperature criteria..
+            min_temp = float(input("What is the minimum temperature you would like for your vacation? "))
+            max_temp = float(input("What is the maximum temperature you would like for your vacation? "))
+
+
+            # 3. Filter the city_data_df DataFrame to find the cities that fit the criteria using the loc method.
+            preferred_cities_df = city_data_df.loc[(city_data_df["Max Temp"] <= max_temp) & (city_data_df["Max Temp"] >= min_temp)]
+            preferred_cities_df.head(10)
+
+
+Output 2.
+![image](https://user-images.githubusercontent.com/85843030/128054673-343d0bec-af4a-428e-8c4e-96a425e2efdf.png)
+
+
