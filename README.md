@@ -194,3 +194,63 @@ Output 2.
 ![image](https://user-images.githubusercontent.com/85843030/128054673-343d0bec-af4a-428e-8c4e-96a425e2efdf.png)
 
 
+
+            # 4a. Determine if there are any empty rows.
+            preferred_cities_df.count()
+
+            # 4b. Drop any empty rows and create a new DataFrame that doesn’t have empty rows.
+            clean_travel_cities = preferred_cities_df.dropna()
+            #clean_travel_cities.head()
+            clean_travel_cities.count()
+            #clean_travel_cities.columns
+            
+            
+            # 5a. Create DataFrame called hotel_df to store hotel names along with city, country, max temp, and coordinates.
+            hotel_df = clean_travel_cities[["City", "Country", "Max Temp", "Current Description", "Lat", "Lng"]].copy()
+            # 5b. Create a new column "Hotel Name".
+            hotel_df["Hotel Name"] = ""
+            hotel_df.head(10)
+            hotel_df.count()
+          
+          Next, is to create a foor loop that goes trough the hotel_df dataframe, and populates hotels in the hotels column that was
+          created in step 5b
+          Becasue i encountered many time out error when I was running this code, error's like timeouts. I decided to make the temperature range 80-90 instead
+          of 75-90 originally intended, and I also put a timer.sleep to delay the request between each call. These solutions, seem to work and I managed 
+          to run the for loop successfully.
+          
+           import time
+            params = {
+               "radius": 5000,
+               "type": "lodging",
+               "key": g_key
+            }
+            # 6b. Iterate through the hotel DataFrame
+            for index, row in hotel_df.iterrows():
+               # get lat, lng from df
+                lat = row["Lat"]
+                lng = row["Lng"]
+               # 6c. Get latitude and longitude from DataFrame.
+                params["location"] = f"{lat},{lng}"
+               # 6d. Set up the base URL for the Google Directions API to get JSON data.
+                base_url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
+               # 6e. Make request and retrieve the JSON data from the search.
+                time.sleep(1)
+                hotels = requests.get(base_url, params=params).json()
+
+               # 6f. Get the first hotel from the results and store the name, if a hotel isn't found skip the city.
+                try:
+                    hotel_df.loc[index, "Hotel Name"] = hotels["results"][0]["name"]
+                    #print(index)
+                except:
+                     print("Hotel not found... skipping.")
+          
+            
+Output 3. 
+![image](https://user-images.githubusercontent.com/85843030/128056163-42c27628-9c54-4ba1-8e2e-31ad004660a4.png)
+            
+            
+            
+            
+            
+            
+            
